@@ -28,11 +28,13 @@ class Client:
         self.name = name
         self.location = location
         self.is_museum = is_museum
+        self.wallet = 0
 
     def sell_artwork(self, artwork, price):
         if artwork.owner.name == self.name:
             listing = Listing(artwork, price, artwork.owner)
             veneer.add_listing(listing)
+            self.wallet += price
 
     def buy_artwork(self, artwork):
         if artwork.owner.name != self.name:
@@ -41,6 +43,7 @@ class Client:
                     art_listing = listing
                     artwork.owner = self
                     veneer.remove_listing(art_listing)
+                    self.wallet -= art_listing.price
 
 class Listing:
     def __init__(self, art, price, seller):
@@ -73,6 +76,7 @@ moma.sell_artwork(maja_desnuda, 40)
 veneer.show_listings()
 prado.buy_artwork(maja_desnuda)
 print(maja_desnuda)
+#print(maja_desnuda.owner.wallet)
 
 #Here are some more things you could try:
 #Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
