@@ -80,5 +80,5 @@ print(maja_desnuda)
 
 #Here are some more things you could try:
 #Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
-#Create a wishlist for your clients, things that are listed but they’re not sure if they should purchase just yet.
+#Create a wishlist for your clients, things that are listed but they're not sure if they should purchase just yet.
 #Create expiration dates for listings! Have out of date listings automatically removed from the marketplace.
