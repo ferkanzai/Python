@@ -39,8 +39,8 @@ class Client:
             for listing in veneer.listings:
                 if listing.art.title == artwork.title:
                     art_listing = listing
-                artwork.owner = self
-                veneer.remove_listing(listing)
+                    artwork.owner = self
+                    veneer.remove_listing(art_listing)
 
 class Listing:
     def __init__(self, art, price, seller):
