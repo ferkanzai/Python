@@ -29,6 +29,7 @@ class Client:
         self.location = location
         self.is_museum = is_museum
         self.wallet = 0
+        self.wishlist = []
 
     def sell_artwork(self, artwork, price):
         if artwork.owner.name == self.name:
@@ -45,12 +46,11 @@ class Client:
                     veneer.remove_listing(art_listing)
                     self.wallet -= art_listing.price
 
-    def wishlist(self, artwork):
-        self.wishlist = []
+    def add_wishlist(self, artwork):
         if artwork.owner.name != self.name:
             for listing in veneer.listings:
                 if listing.art.title == artwork.title:
-                    self.wishlist.append(listing)
+                    self.wishlist.append(listing.art.title)
 
 class Listing:
     def __init__(self, art, price, seller):
@@ -69,6 +69,8 @@ print(girl_with_mandolin)
 moma = Client('The MOMA', 'New York', True)
 prado = Client('Museo del Prado', 'Madrid', True)
 edytta.sell_artwork(girl_with_mandolin, 6)
+prado.add_wishlist(girl_with_mandolin)
+print(prado.wishlist)
 veneer.show_listings()
 moma.buy_artwork(girl_with_mandolin)
 print(girl_with_mandolin)
@@ -81,18 +83,13 @@ moma.buy_artwork(maja_desnuda)
 print(maja_desnuda)
 moma.sell_artwork(maja_desnuda, 40)
 veneer.show_listings()
-prado.wishlist(maja_desnuda)
+prado.add_wishlist(maja_desnuda)
 print(prado.wishlist)
 prado.buy_artwork(maja_desnuda)
 print(maja_desnuda)
 #print(maja_desnuda.owner.wallet)
 
 #Here are some more things you could try:
-<<<<<<< HEAD
 #(done) Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
 #Create a wishlist for your clients, things that are listed but they’re not sure if they should purchase just yet.
-=======
-#Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
-#Create a wishlist for your clients, things that are listed but they're not sure if they should purchase just yet.
->>>>>>> 6d3d8da5eeec6034ae0ffd77dfb4cce35a308e92
 #Create expiration dates for listings! Have out of date listings automatically removed from the marketplace.
