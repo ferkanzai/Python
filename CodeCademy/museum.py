@@ -88,6 +88,11 @@ print(maja_desnuda)
 #print(maja_desnuda.owner.wallet)
 
 #Here are some more things you could try:
+<<<<<<< HEAD
 #(done) Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
 #Create a wishlist for your clients, things that are listed but they’re not sure if they should purchase just yet.
+=======
+#Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
+#Create a wishlist for your clients, things that are listed but they're not sure if they should purchase just yet.
+>>>>>>> 6d3d8da5eeec6034ae0ffd77dfb4cce35a308e92
 #Create expiration dates for listings! Have out of date listings automatically removed from the marketplace.
