@@ -45,6 +45,13 @@ class Client:
                     veneer.remove_listing(art_listing)
                     self.wallet -= art_listing.price
 
+    def wishlist(self, artwork):
+        self.wishlist = []
+        if artwork.owner.name != self.name:
+            for listing in veneer.listings:
+                if listing.art.title == artwork.title:
+                    self.wishlist.append(listing)
+
 class Listing:
     def __init__(self, art, price, seller):
         self.art = art
@@ -74,11 +81,13 @@ moma.buy_artwork(maja_desnuda)
 print(maja_desnuda)
 moma.sell_artwork(maja_desnuda, 40)
 veneer.show_listings()
+prado.wishlist(maja_desnuda)
+print(prado.wishlist)
 prado.buy_artwork(maja_desnuda)
 print(maja_desnuda)
 #print(maja_desnuda.owner.wallet)
 
 #Here are some more things you could try:
-#Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
+#(done) Add a wallet instance variable to clients, update the buying and selling of artworks to also exchange dollar amounts.
 #Create a wishlist for your clients, things that are listed but they’re not sure if they should purchase just yet.
 #Create expiration dates for listings! Have out of date listings automatically removed from the marketplace.
