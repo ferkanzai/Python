@@ -14,8 +14,8 @@ if __name__ == '__main__':
     for _ in range(6):
         arr.append(list(map(int, input().rstrip().split())))
 
-    print(arr)
-    print(len(arr))
+    #print(arr)
+    #print(len(arr))
     largest = []
     biggest = 0
 
@@ -28,15 +28,19 @@ if __name__ == '__main__':
             line.append(arr[i+1][x+1])
             line.append(arr[i+2][x:x+3])
         largest.append(line)
-    print(largest)
+    #print(largest)
 
     for i in range(len(largest)):
-        sum = 0
-        print(largest[i])
-        for n[::3] in largest[i]:
-            if type(n) == list:
-                for x in n:
-                    sum += x
-            else:
-                sum += n
-        print(sum)
+        for x in range(0, len(largest[i]), 3):
+            test = largest[i][x:x+3]
+            #print(test)
+            sum = 0
+            for n in range(len(test)):
+                if type(test[n]) == list:
+                    for y in test[n]:
+                        sum += y
+                else:
+                    sum += test[n]
+                if sum > biggest:
+                    biggest = sum
+    print(biggest)
