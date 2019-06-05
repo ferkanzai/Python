@@ -16,13 +16,27 @@ if __name__ == '__main__':
 
     print(arr)
     print(len(arr))
-    largest = 0
-    one = None
-    two = None
-    three = None
+    largest = []
+    biggest = 0
+
+#this for loop creates an array with 4 arrays with the necesary numbers
 
     for i in range(4):
-        one = [arr[i][i:i+3]]#, arr[i+1][i:i+3]]#, arr[i+2][i:i+3]]
-        print(one)
-    print(two)
-    print(three)
+        line = []
+        for x in range(4):
+            line.append(arr[i][x:x+3])
+            line.append(arr[i+1][x+1])
+            line.append(arr[i+2][x:x+3])
+        largest.append(line)
+    print(largest)
+
+    for i in range(len(largest)):
+        sum = 0
+        print(largest[i])
+        for n[::3] in largest[i]:
+            if type(n) == list:
+                for x in n:
+                    sum += x
+            else:
+                sum += n
+        print(sum)
