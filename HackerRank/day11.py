@@ -17,7 +17,7 @@ if __name__ == '__main__':
     #print(arr)
     #print(len(arr))
     largest = []
-    biggest = 0
+    biggest = []
 
 #this for loop creates an array with 4 arrays with the necesary numbers
 
@@ -41,6 +41,7 @@ if __name__ == '__main__':
                         sum += y
                 else:
                     sum += test[n]
-                if sum > biggest:
-                    biggest = sum
-    print(biggest)
+            biggest.append(sum)
+            #print(sum)
+    #print(biggest)
+    print(max(biggest))
