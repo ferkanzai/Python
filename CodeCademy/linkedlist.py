@@ -31,13 +31,24 @@ class LinkedList:
     string = ""
     head_node = self.get_head_node()
     head_value = head_node.value
-    if head_value != None:
+    if head_value is not None:
       string = string + str(head_value) + "\n"
       next_node = head_node.get_next_node()
       while next_node is not None:
         string = string + str(next_node.value) + "\n"
         next_node = next_node.get_next_node()
     return string
+
+# CodeCademy solution for stringify_list():
+
+""" def stringify_list(self):
+    string_list = ""
+    current_node = self.get_head_node()
+    while current_node:
+      if current_node.get_value() != None:
+        string_list += str(current_node.get_value()) + "\n"
+      current_node = current_node.get_next_node()
+    return string_list """
 
 # Test your code by uncommenting the statements below - did your list print to the terminal?
 ll = LinkedList(5)
