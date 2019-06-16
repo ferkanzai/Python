@@ -1,22 +1,42 @@
 from node import Node
 
 class Stack:
-    def __init__(self):
+    def __init__(self, limit=1000):
         self.top_item = None
+        self.size = 0
+        self.limit = limit
   
-# Define your push() and pop() methods below:
     def push(self, value):
-        item = Node(value)
-        item.set_next_node(self.top_item)
-        self.top_item = item
+        if self.has_space():
+            item = Node(value)
+            item.set_next_node(self.top_item)
+            self.top_item = item
+            self.size += 1
+        else:
+            print("All out of space!")
   
     def pop(self):
-        item_to_remove = self.top_item
-        self.top_item = item_to_remove.next_node
-        return item_to_remove.value
+        if not self.is_empty():
+            item_to_remove = self.top_item
+            self.top_item = item_to_remove.next_node
+            self.size -= 1
+            return item_to_remove.value
+        else:
+            print("This stack is totally empty.")
   
     def peek(self):
-        return self.top_item.get_value()
+        if not self.is_empty():
+            return self.top_item.get_value()
+        else:
+            print("Nothing to see here!")
+    
+    def has_space(self):
+        if self.limit > self.size:
+            return True
+    
+    def is_empty(self):
+        if self.size == 0:
+            return True
     
     def show(self):
         string = ""
