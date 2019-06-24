@@ -21,9 +21,8 @@ for bucket in buckets:
 
     if len(keys) <= 5:
         print("Bucket {} has the following objects:".format(bucket))
-        string = ""
         for key in keys:
-            string += string + key + "\n"
-        print(string)
+            print(key)
+        print("")
     else:
         print("Bucket {} has too many objects \n".format(bucket))
