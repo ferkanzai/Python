@@ -5,6 +5,12 @@
 # http://www.py4e.com/code3/bs4.zip
 # and unzip it in the same directory as this file
 
+# website to use: http://py4e-data.dr-chuck.net/known_by_Rahman.html 
+# count: 7 and position: 18
+
+# test website: http://py4e-data.dr-chuck.net/known_by_Fikret.html
+# count: 4 and position: 3
+
 import urllib.request, urllib.parse, urllib.error
 from bs4 import BeautifulSoup
 import ssl
