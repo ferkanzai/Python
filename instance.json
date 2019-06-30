@@ -1,0 +1,49 @@
+{
+    "Instances": [
+        {
+            "Name": "fcadubDomain",
+            "Instance ID": "i-003b5833c324cb4b8"
+        },
+        {
+            "Name": "redhat",
+            "Instance ID": "i-0c4d5bfbeec642833"
+        },
+        {
+            "Name": "redhat1",
+            "Instance ID": "i-08c7f7da80f2d63bb"
+        },
+        {
+            "Name": "Windows2008R2",
+            "Instance ID": "i-0b79ccc5c63fea557"
+        },
+        {
+            "Name": "testAmazonLinux",
+            "Instance ID": "i-08964d510ab6eccca"
+        },
+        {
+            "Name": "RDS",
+            "Instance ID": "i-08ab0f4dc20a000b3",
+            "Public IP": "54.171.71.227"
+        },
+        {
+            "Name": "DavidStern",
+            "Instance ID": "i-06351a99679c3c878"
+        },
+        {
+            "Name": "NBABastionHost",
+            "Instance ID": "i-083feb236dc722a9f"
+        },
+        {
+            "Name": "AdamSilver",
+            "Instance ID": "i-04297db3bb8928e2a"
+        },
+        {
+            "Name": "Wind2k19",
+            "Instance ID": "i-09a405fac230fdc4c"
+        },
+        {
+            "Name": "NBALinux",
+            "Instance ID": "i-0c8ad11ee258b0b67"
+        }
+    ]
+}
