@@ -19,7 +19,7 @@ def change_ip(ip):
 	new_policy = s3.put_bucket_policy(
         Bucket=bucket_name,
         Policy=policy_new
-        )
+    )
 	return new_policy
 
 external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
