@@ -4,7 +4,8 @@ s3 = boto3.client('s3')
 bucket_name = 'fcadevplan'
 
 def get_policy():
-    policy = json.dumps(s3.get_bucket_policy(Bucket=bucket_name))
+    response = s3.get_bucket_policy(Bucket=bucket_name)
+    policy = json.dumps(response["Policy"])
     return policy
 
 def get_ip():
@@ -15,10 +16,9 @@ def get_ip():
 def change_ip(ip):
 	policy = get_policy()
 	replaced = json.loads(re.sub(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', ip, policy))
-	policy_new = replaced["Policy"]
 	new_policy = s3.put_bucket_policy(
         Bucket=bucket_name,
-        Policy=policy_new
+        Policy=replaced
     )
 	return new_policy
 
@@ -35,4 +35,4 @@ else:
     change_ip(external_ip)
     print("IP on the policy was changed to {}".format(external_ip))
 
-print(get_policy())
+#print(get_policy())
