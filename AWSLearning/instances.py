@@ -1,10 +1,20 @@
-import boto3, json, re
+import boto3, json, re, time
+from tabulate import tabulate
 
 region_regex = '[a-z]{2}-[a-z]{4,7}-[0-9]{1}'
 
 def check(region):
     if re.search(region_regex, region):
         return True
+
+def check_status(i_id):
+    describe_instance = ec2.describe_instances(
+            InstanceIds=[
+                i_id
+            ]
+        )
+    status = describe_instance['Reservations'][0]['Instances'][0]['State']['Code']
+    return status
 
 while True:
     region = input("What region do you want to check? (eu-west-1 is default)\n")
@@ -27,10 +37,10 @@ while True:
     print("Choose an option:")
     print("1. Running instances")
     print("2. Stopped instances")
-    print("3. Start instance (press ENTER to exit)")
-    print("4. Stop instance (press ENTER to exit)")
-    print("5. SSH to instance (press ENTER to exit)")
-    print("6. Decrypt password for Windows instances (press ENTER to exit)")
+    print("3. Start instance")
+    print("4. Stop instance")
+    print("5. SSH to instance")
+    print("6. Decrypt password for Windows instances")
     print("7. Exit")
     print("")
     choice = input("Enter your choice number:\n")
@@ -58,9 +68,11 @@ while True:
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append({'Name': name, 'Instance ID': i_id})
+                    #instance_list.append({'Name': name, 'Instance ID': i_id})
+                    instance_list.append([name, i_id])
             print("")
-            print(json.dumps(instance_list, indent=2), "\n")
+            #print(json.dumps(instance_list, indent=2), "\n")
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'), "\n")
 
     elif choice == '2':
         response = ec2.describe_instances(Filters=[
@@ -85,14 +97,40 @@ while True:
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append({'Name': name, 'Instance ID': i_id})
+                    #instance_list.append({'Name': name, 'Instance ID': i_id})
+                    instance_list.append([name, i_id])
             print("")
-            print(json.dumps(instance_list, indent=2), "\n")
+            #print(json.dumps(instance_list, indent=2), "\n")
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'), "\n")
 
     elif choice == '3':
-        continue
+        i_id = input("\nWhich instance do you want to start?\n")
+        ec2.start_instances(
+            InstanceIds=[
+                i_id
+            ]
+        )
+        status = check_status(i_id)
+        while status != 16:
+            time.sleep(5)
+            print("Instance {} still starting".format(i_id))
+            status = check_status(i_id)
+        print("Instance {} is STARTED\n".format(i_id))
+
     elif choice == '4':
-        continue
+        i_id = input("\nWhich instance do you want to stop?\n")
+        ec2.stop_instances(
+            InstanceIds=[
+                i_id
+            ]
+        )
+        status = check_status(i_id)
+        while status != 80:
+            time.sleep(5)
+            print("Instance {} still stopping".format(i_id))
+            status = check_status(i_id)
+        print("Instance {} is STOPPED\n".format(i_id))
+
     elif choice == '5':
         continue
     elif choice == '6':
