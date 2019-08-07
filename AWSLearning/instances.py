@@ -140,6 +140,8 @@ while True:
         )
         pswd_encrypted = response['PasswordData']
         print("\n", pswd_encrypted, "\n")
+    # check https://github.com/tomrittervg/decrypt-windows-ec2-passwd/blob/master/decrypt-windows-ec2-passwd.py
+    # and https://gist.github.com/tinkerbotfoo/337df5bd1faff777fb52
     elif choice == '7':
         break
     else:
