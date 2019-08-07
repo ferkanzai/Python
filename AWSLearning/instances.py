@@ -134,7 +134,12 @@ while True:
     elif choice == '5':
         continue
     elif choice == '6':
-        continue
+        i_id = input("\nWindows Instance ID from which you want to decrypt the password:\n")
+        response = ec2.get_password_data(
+            InstanceId=i_id
+        )
+        pswd_encrypted = response['PasswordData']
+        print("\n", pswd_encrypted, "\n")
     elif choice == '7':
         break
     else:
