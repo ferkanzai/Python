@@ -1,9 +1,9 @@
-import boto3, json, re, time, os, base64, rsa
+import boto3, json, time, os, base64, rsa
 from tabulate import tabulate
 
 ec2 = boto3.client('ec2')
 
-list_regions = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
+regions_list = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
 pem_file_loc = os.path.expanduser('~/windows.pem')
 
 def check_status(i_id):
@@ -15,10 +15,14 @@ def check_status(i_id):
     status = describe_instance['Reservations'][0]['Instances'][0]['State']['Code']
     return status
 
+def list_regions():
+    regions_list = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
+    print(tabulate(regions_list, headers=['Region'], tablefmt='github'))
+
 while True:
     region = input("What region do you want to check? (press ENTER for default region: eu-west-1)\nIf you don't know the regions, type list.\n")
     regions = []
-    for test in list_regions:
+    for test in regions_list:
         for name in test:
             regions.append(name)
     if region == "":
@@ -27,7 +31,7 @@ while True:
         break
     elif region == 'list':
         print("")
-        print(tabulate(list_regions, headers=['Region'], tablefmt='github'), "\n")
+        list_regions()        
     elif region in regions:
         print("You are using {} region".format(region))
         break
