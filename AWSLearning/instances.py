@@ -3,14 +3,8 @@ from tabulate import tabulate
 
 ec2 = boto3.client('ec2')
 
-region_regex = '[a-z]{2}-[a-z]{4,7}-[0-9]{1}'
 list_regions = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
 pem_file_loc = os.path.expanduser('~/windows.pem')
-
-
-def check(region):
-    if re.search(region_regex, region):
-        return True
 
 def check_status(i_id):
     describe_instance = ec2.describe_instances(
