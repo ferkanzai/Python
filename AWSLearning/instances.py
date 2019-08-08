@@ -23,23 +23,28 @@ def check_status(i_id):
 
 while True:
     region = input("What region do you want to check? (press ENTER for default region: eu-west-1)\nIf you don't know the regions, type list.\n")
-    print("")
+    regions = []
+    for test in list_regions:
+        for name in test:
+            regions.append(name)
     if region == "":
         region = 'eu-west-1'
-        print("You are using {} region\n".format(region))
+        print("You are using {} region".format(region))
         break
     elif region == 'list':
+        print("")
         print(tabulate(list_regions, headers=['Region'], tablefmt='github'), "\n")
-    elif region in list_regions:
-        print("\nYou are using {} region\n".format(region))
+    elif region in regions:
+        print("You are using {} region".format(region))
         break
     else:
-        print("\nNot a valid region\n")
+        print("Not a valid region\n")
 
 ec2 = boto3.client('ec2', region_name=region)
 
 while True:
     
+    print("")
     print("Check EC2 instances:")
     print("Choose an option:")
     print("1. Running instances")
@@ -63,10 +68,9 @@ while True:
             ]
         )
         if len(response['Reservations']) == 0:
-            print("\nThere are no running instances\n")
+            print("\nThere are no running instances")
         else:
             instance_list = []
-            #instances = response['Reservations'][0]['Instances']
             for reservation in response['Reservations']:
                 instances = reservation['Instances']
                 for instance in instances:
@@ -75,11 +79,9 @@ while True:
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    #instance_list.append({'Name': name, 'Instance ID': i_id})
                     instance_list.append([name, i_id])
             print("")
-            #print(json.dumps(instance_list, indent=2), "\n")
-            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'), "\n")
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'))
 
     elif choice == '2':
         response = ec2.describe_instances(Filters=[
@@ -92,10 +94,9 @@ while True:
             ]
         )
         if len(response['Reservations']) == 0:
-            print("\nThere are no stopped instances\n")
+            print("\nThere are no stopped instances")
         else:
             instance_list = []
-            #instances = response['Reservations'][0]['Instances']
             for reservation in response['Reservations']:
                 instances = reservation['Instances']
                 for instance in instances:
@@ -104,11 +105,9 @@ while True:
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    #instance_list.append({'Name': name, 'Instance ID': i_id})
                     instance_list.append([name, i_id])
             print("")
-            #print(json.dumps(instance_list, indent=2), "\n")
-            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'), "\n")
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'))
 
     elif choice == '3':
         i_id = input("\nWhich instance do you want to start?\n")
@@ -122,7 +121,7 @@ while True:
             time.sleep(5)
             print("Instance {} still starting".format(i_id))
             status = check_status(i_id)
-        print("Instance {} is STARTED\n".format(i_id))
+        print("Instance {} is STARTED".format(i_id))
 
     elif choice == '4':
         i_id = input("\nWhich instance do you want to stop?\n")
@@ -136,10 +135,19 @@ while True:
             time.sleep(5)
             print("Instance {} still stopping".format(i_id))
             status = check_status(i_id)
-        print("Instance {} is STOPPED\n".format(i_id))
+        print("Instance {} is STOPPED".format(i_id))
 
     elif choice == '5':
-        continue
+        public_ip = ''
+        i_id = input("\nInstance ID you want SSH to:\n")
+        response = ec2.describe_instances(
+            InstanceIds=[
+                i_id
+            ]
+        )
+        public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+        print("")
+        os.system("ssh -i ~/linux.pem ec2-user@{} -o \"StrictHostKeyChecking no\"".format(public_ip))
     elif choice == '6':
         i_id = input("\nWindows Instance ID from which you want to decrypt the password:\n")
         response = ec2.get_password_data(
@@ -152,7 +160,7 @@ while True:
             key = rsa.decrypt(pswd_encrypted,priv)
         else:
             key = 'Wait at least 4 minutes after creation before the admin password is available'
-        print("\nThe password is: {}\n".format(key))
+        print("\nThe password is: {}".format(key))
     elif choice == '7':
         break
     else:
