@@ -69,13 +69,22 @@ while True:
                 instances = reservation['Instances']
                 for instance in instances:
                     i_id = instance['InstanceId']
+                    private_ip = instance['PrivateIpAddress']
+                    try:
+                        public_ip = instance['PublicIpAddress']
+                    except KeyError:
+                        public_ip = 'Private instance'
+                    try:
+                        os = instance['Platform']
+                    except KeyError:
+                        os = 'linux'
                     tags = instance['Tags']
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append([name, i_id])
+                    instance_list.append([name, i_id, os, private_ip, public_ip])
             print("")
-            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'))
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID', 'OS', 'Private IP', 'Public IP'], tablefmt='github'))
 
     elif choice == '2':
         response = ec2.describe_instances(Filters=[
@@ -96,12 +105,17 @@ while True:
                 for instance in instances:
                     i_id = instance['InstanceId']
                     tags = instance['Tags']
+                    ami = instance['ImageId']
+                    try:
+                        os = instance['Platform']
+                    except KeyError:
+                        os = 'linux'
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append([name, i_id])
+                    instance_list.append([name, i_id, os])
             print("")
-            print(tabulate(instance_list, headers=['Instance name', 'Instance ID'], tablefmt='github'))
+            print(tabulate(instance_list, headers=['Instance name', 'Instance ID', 'OS'], tablefmt='github'))
 
     elif choice == '3':
         i_id = input("\nWhich instance do you want to start?\n")
