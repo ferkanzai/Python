@@ -1,7 +1,12 @@
-import boto3, json, re, time
+import boto3, json, re, time, os, base64, rsa
 from tabulate import tabulate
 
+ec2 = boto3.client('ec2')
+
 region_regex = '[a-z]{2}-[a-z]{4,7}-[0-9]{1}'
+list_regions = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
+pem_file_loc = os.path.expanduser('~/windows.pem')
+
 
 def check(region):
     if re.search(region_regex, region):
@@ -17,17 +22,19 @@ def check_status(i_id):
     return status
 
 while True:
-    region = input("What region do you want to check? (eu-west-1 is default)\n")
+    region = input("What region do you want to check? (press ENTER for default region: eu-west-1)\nIf you don't know the regions, type list.\n")
+    print("")
     if region == "":
         region = 'eu-west-1'
         print("You are using {} region\n".format(region))
         break
+    elif region == 'list':
+        print(tabulate(list_regions, headers=['Region'], tablefmt='github'), "\n")
+    elif region in list_regions:
+        print("\nYou are using {} region\n".format(region))
+        break
     else:
-        if check(region):
-            print("\nYou are using {} region\n".format(region))
-            break
-        else:
-            print("\nNot a valid region\n")
+        print("\nNot a valid region\n")
 
 ec2 = boto3.client('ec2', region_name=region)
 
@@ -138,10 +145,14 @@ while True:
         response = ec2.get_password_data(
             InstanceId=i_id
         )
-        pswd_encrypted = response['PasswordData']
-        print("\n", pswd_encrypted, "\n")
-    # check https://github.com/tomrittervg/decrypt-windows-ec2-passwd/blob/master/decrypt-windows-ec2-passwd.py
-    # and https://gist.github.com/tinkerbotfoo/337df5bd1faff777fb52
+        pswd_encrypted = base64.b64decode(response['PasswordData'])
+        if pswd_encrypted:
+            with open (pem_file_loc,'r') as privkeyfile:
+                priv = rsa.PrivateKey.load_pkcs1(privkeyfile.read())
+            key = rsa.decrypt(pswd_encrypted,priv)
+        else:
+            key = 'Wait at least 4 minutes after creation before the admin password is available'
+        print("\nThe password is: {}\n".format(key))
     elif choice == '7':
         break
     else:
