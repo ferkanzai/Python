@@ -157,9 +157,12 @@ while True:
                 i_id
             ]
         )
-        public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-        print("")
-        os.system("ssh -i ~/linux.pem ec2-user@{} -o \"StrictHostKeyChecking no\"".format(public_ip))
+        try:
+            public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+            print("")
+            os.system("ssh -i ~/linux.pem ec2-user@{} -o \"StrictHostKeyChecking no\"".format(public_ip))
+        except:
+            continue
     elif choice == '6':
         i_id = input("\nWindows Instance ID from which you want to decrypt the password:\n")
         response = ec2.get_password_data(
