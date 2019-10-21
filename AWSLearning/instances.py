@@ -79,14 +79,14 @@ while True:
                     except KeyError:
                         public_ip = 'Private instance'
                     try:
-                        os = instance['Platform']
+                        os_type = instance['Platform']
                     except KeyError:
-                        os = 'linux'
+                        os_type = 'linux'
                     tags = instance['Tags']
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append([name, i_id, os, private_ip, public_ip])
+                    instance_list.append([name, i_id, os_type, private_ip, public_ip])
             print("")
             print(tabulate(instance_list, headers=['Instance name', 'Instance ID', 'OS', 'Private IP', 'Public IP'], tablefmt='github'))
 
@@ -111,13 +111,13 @@ while True:
                     tags = instance['Tags']
                     ami = instance['ImageId']
                     try:
-                        os = instance['Platform']
+                        os_type = instance['Platform']
                     except KeyError:
-                        os = 'linux'
+                        os_type = 'linux'
                     for tag in tags:
                         if tag['Key'] == 'Name':
                             name = tag['Value']
-                    instance_list.append([name, i_id, os])
+                    instance_list.append([name, i_id, os_type])
             print("")
             print(tabulate(instance_list, headers=['Instance name', 'Instance ID', 'OS'], tablefmt='github'))
 
@@ -161,8 +161,8 @@ while True:
             public_ip = response['Reservations'][0]['Instances'][0]['PublicIpAddress']
             print("")
             os.system("ssh -i ~/linux.pem ec2-user@{} -o \"StrictHostKeyChecking no\"".format(public_ip))
-        except:
-            continue
+        except AtributeError as e:
+            print(e)
     elif choice == '6':
         i_id = input("\nWindows Instance ID from which you want to decrypt the password:\n")
         response = ec2.get_password_data(
