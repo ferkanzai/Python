@@ -19,24 +19,28 @@ def list_regions():
     regions_list = [[ec2.describe_regions()["Regions"][i]["RegionName"]] for i in range(len(ec2.describe_regions()["Regions"]))]
     print(tabulate(regions_list, headers=['Region'], tablefmt='github'))
 
-while True:
-    region = input("What region do you want to check? (press ENTER for default region: eu-west-1)\nIf you don't know the regions, type list.\n")
-    regions = []
-    for test in regions_list:
-        for name in test:
-            regions.append(name)
-    if region == "":
-        region = 'eu-west-1'
-        print("You are using {} region".format(region))
-        break
-    elif region == 'list':
-        print("")
-        list_regions()        
-    elif region in regions:
-        print("You are using {} region".format(region))
-        break
-    else:
-        print("Not a valid region\n")
+def select_region():
+    while True:
+        global region
+        region = input("What region do you want to check? (press ENTER for default region: eu-west-1)\nIf you don't know the regions, type list.\n")
+        regions = []
+        for test in regions_list:
+            for name in test:
+                regions.append(name)
+        if region == "":
+            region = 'eu-west-1'
+            print("You are using {} region".format(region))
+            break
+        elif region == 'list':
+            print("")
+            list_regions()        
+        elif region in regions:
+            print("You are using {} region".format(region))
+            break
+        else:
+            print("Not a valid region\n")
+
+select_region()
 
 ec2 = boto3.client('ec2', region_name=region)
 
@@ -51,7 +55,8 @@ while True:
     print("4. Stop instance")
     print("5. SSH to instance")
     print("6. Decrypt password for Windows instances")
-    print("7. Exit")
+    print("7. Change region")
+    print("8. Exit")
     print("")
     choice = input("Enter your choice number:\n")
 
@@ -176,7 +181,10 @@ while True:
         else:
             key = 'Wait at least 4 minutes after creation before the admin password is available'
         print("\nThe password is: {}".format(key))
-    elif choice == '7':
+    elif choice =='7':
+        select_region()
+        ec2 = boto3.client('ec2', region_name=region)
+    elif choice == '8':
         break
     else:
         print('Invalid option, please, enter a valid number:\n')
