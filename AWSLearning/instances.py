@@ -89,8 +89,11 @@ while True:
                         os_type = 'linux'
                     tags = instance['Tags']
                     for tag in tags:
-                        if tag['Key'] == 'Name':
-                            name = tag['Value']
+                        try:
+                            if tag['Key'] == 'Name':
+                                name = tag['Value']
+                        except:
+                            name = 'no name'
                     instance_list.append([name, i_id, os_type, private_ip, public_ip])
             print("")
             print(tabulate(instance_list, headers=['Instance name', 'Instance ID', 'OS', 'Private IP', 'Public IP'], tablefmt='github'))
